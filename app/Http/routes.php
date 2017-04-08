@@ -36,3 +36,11 @@ resource('users','UsersController');
 // patch('/users/{id}','UsersController@update')->name('users.update');
 // 删除用户
 // delete('/users/{id}','UsersController@destroy')->name('users.destroy');
+
+// 登录
+// 显示登录页面
+get('login','SessionsController@create')->name('login');
+// 创建新会话（登录）
+post('login','SessionsController@store')->name('login');
+// 销毁会话（退出登录）
+delete('logout','SessionsController@destroy')->name('logout');

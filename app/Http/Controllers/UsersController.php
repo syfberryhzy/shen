@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 
+use Auth;
+
 class UsersController extends Controller
 {
     public function create(){
@@ -32,6 +34,9 @@ class UsersController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
+
+        // 注册成功后能够自动登录，这样的应用用户体验会更棒。
+        Auth::login($user);
         // 闪现消息
         session()->flash('success','欢迎，您将在这里开启一段新的旅程～');
         return redirect()->route('users.show',[$user]);
