@@ -12,10 +12,18 @@
 */
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
+
+    $data_time = $faker->date . ' ' . $faker->time;
+    static $password;
+
     return [
         'name' => $faker->name,
-        'email' => $faker->safeEmail,
-        'password' => bcrypt(str_random(10)),
+        'email'=> $faker->safeEmail,
+        'is_admin' => false,
+        'password'=> $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'created_at' => $data_time,
+        'updated_at' => $data_time,
     ];
+    // 我们去掉了用户密码的加密操作，并使用生成的假日期对用户的创建时间和更新时间进行赋值。
 });
