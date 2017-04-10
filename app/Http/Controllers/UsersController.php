@@ -11,6 +11,8 @@ use App\Models\User;
 
 use Auth;
 
+use Mail;
+
 class UsersController extends Controller
 {
     // __contruct是PHP　的构造器方法，当一个类对象被创建之前该方法将会被调用。我们在__construct方法中调用了.middleware
@@ -63,10 +65,36 @@ class UsersController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        // 注册成功后能够自动登录，这样的应用用户体验会更棒。
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success','验证邮件已发送到你的注册邮箱上，请注意查收');
+        return redirect('/');
+        // // 注册成功后能够自动登录，这样的应用用户体验会更棒。
+        // Auth::login($user);
+        // // 闪现消息
+        // session()->flash('success','欢迎，您将在这里开启一段新的旅程～');
+        // return redirect()->route('users.show',[$user]);
+    }
+    public function sendEmailConfirmationTo($user){
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = '1913549290@qq.com';
+        $name = 'Laravel_BERRY';
+        $to = $user->email;
+        $subject = '感谢注册　Sample 应用！请确认你的邮箱。';
+        Mail::send($view, $data ,function($message) use ($from, $name , $to ,$subject){
+            $message->from($from,$name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token){
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true ;
+        $user->activation_token = null;
+        $user->save();
+
         Auth::login($user);
-        // 闪现消息
-        session()->flash('success','欢迎，您将在这里开启一段新的旅程～');
+        session()->flash('success','恭喜你，激活成功！');
         return redirect()->route('users.show',[$user]);
     }
 
