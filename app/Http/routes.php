@@ -46,3 +46,12 @@ post('login','SessionsController@store')->name('login');
 delete('logout','SessionsController@destroy')->name('logout');
 
 get('signup/comfirm/{token}','UsersController@confirmEmail')->name('confirm_email');
+
+// 显示重置密码的邮箱发送页面
+get('password/email','Auth\PasswordController@getEmail')->name('password.reset');
+// 处理重置密码的邮箱发送操作
+post('password/email','Auth\PasswordController@postEmail')->name('password.reset');
+// 显示重置密码的密码更新页面
+get('password/reset/{token}','Auth\PasswordController@getReset')->name('password.edit');
+// 显示重置密码的密码更新请求
+post('password/reset','Auth\PasswordController@postReset')->name('password.update');
