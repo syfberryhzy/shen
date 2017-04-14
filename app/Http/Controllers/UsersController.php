@@ -19,7 +19,7 @@ class UsersController extends Controller
     // 方法，该方法接收两个参数，第一个为中间件的名称，第二个为要进行过滤的动作。我们通过only方法来指定动作使用Auth中间件进行过滤。
     public function __construct(){
         $this->middleware('auth',[
-            'only'=>['edit','update','destroy']
+            'only'=>['edit','update','destroy','followings','followers']
         ]);
         //只让未登录用户访问注册页面
         $this->middleware('guest',[
@@ -50,7 +50,7 @@ class UsersController extends Controller
     public function show($id){
         $user = User::findOrFail($id);
         $statuses = $user->statuses()->orderBy('created_at','desc')->paginate(10);
-
+//dd($statuses);
         return view('users.show',compact('user','statuses'));
         // compact可以同时接收多个参数，在上面代码我们将用户数据　$user 和　微博动态数据　$statuses 同时传递给用户个人页面的视图上。
     }
@@ -140,5 +140,22 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success','成功删除用户！');
         return back();
+    }
+
+
+    // 获取用户关注人列表
+    public function followings($id){
+        $user = User::findOrFail($id);
+        $users = $user->followings()->paginate(20);
+        $title = '关注的人';
+        return view('users.show_follow',compact('users','title'));
+    }
+
+    // 获取粉丝列表
+    public function followers($id){
+        $user = User::findOrFail($id);
+        $users = $user->followers()->paginate(20);
+        $title = '粉丝';
+        return view('users.show_follow',compact('users','title'));
     }
 }

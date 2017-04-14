@@ -59,3 +59,12 @@ post('password/reset','Auth\PasswordController@postReset')->name('password.updat
 resource('statuses','StatusesController',['only' => ['store', 'destroy']]);
 //post('/statuses','StatusesController@store'); 处理创建创建微博的请求
 //delete('/statuses','StatusesController@destroy');　处理删除微博的请求
+
+// ［关注的人］列表　和　［粉丝］列表
+get('/users/{id}/followings','UsersController@followings')->name('users.followings');
+get('/users/{id}/followers','UsersController@followers')->name('users.followers');
+
+// 关注用户
+post('/users/followers/{id}','FollowersController@store')->name('followers.store');
+// 取消关注用户
+delete('/users/followers/{id}','FollowersController@destroy')->name('followers.destroy');
