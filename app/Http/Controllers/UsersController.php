@@ -49,7 +49,10 @@ class UsersController extends Controller
 
     public function show($id){
         $user = User::findOrFail($id);
-        return view('users.show',compact('user'));
+        $statuses = $user->statuses()->orderBy('created_at','desc')->paginate(10);
+
+        return view('users.show',compact('user','statuses'));
+        // compact可以同时接收多个参数，在上面代码我们将用户数据　$user 和　微博动态数据　$statuses 同时传递给用户个人页面的视图上。
     }
 
     public function store(Request $request){

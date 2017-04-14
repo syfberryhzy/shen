@@ -55,3 +55,7 @@ post('password/email','Auth\PasswordController@postEmail')->name('password.reset
 get('password/reset/{token}','Auth\PasswordController@getReset')->name('password.edit');
 // 显示重置密码的密码更新请求
 post('password/reset','Auth\PasswordController@postReset')->name('password.update');
+
+resource('statuses','StatusesController',['only' => ['store', 'destroy']]);
+//post('/statuses','StatusesController@store'); 处理创建创建微博的请求
+//delete('/statuses','StatusesController@destroy');　处理删除微博的请求

@@ -28,3 +28,12 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
     // 我们去掉了用户密码的加密操作，并使用生成的假日期对用户的创建时间和更新时间进行赋值。
 });
+
+$factory->define(App\Models\Status::class, function (Faker\Generator $faker){
+    $date_time = $faker->date . ' ' . $faker->time;
+    return [
+        'content' => $faker->text(),
+        'created_at' => $date_time,
+        'updated_at' => $date_time,
+    ];
+});
